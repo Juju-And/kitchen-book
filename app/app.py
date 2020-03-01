@@ -92,7 +92,6 @@ def ingredients(recipe_id):
 
         results = [
             {
-                # "recipe": recipe.name,
                 "ingredients": ingredients_list
 
             }
