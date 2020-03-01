@@ -93,7 +93,6 @@ def ingredients(recipe_id):
         results = [
             {
                 "ingredients": ingredients_list
-
             }
         ]
         return {recipe.name: results}
