@@ -10,7 +10,6 @@ ingred = db.Table('ingred',
                   db.Column('product_id', db.Integer, db.ForeignKey('product.product_id'))
                   )
 
-
 class Recipe(db.Model):
     # __tablename__ = 'recipes'
 
