@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Kitchen book</title>
-</head>
-<body>
-    <h1>KITCHEN BOOK</h1>
-    <h2>List of contents</h2>
-    <ul>
-        <li><h3><a href="/recipes">Recipes</a></h3></li>
-        <li><h3><a href="/products">Products</a></h3></li>
-    </ul>
-</body>
-</html>
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h1>Index</h1>
+  <p class="important">
+    Welcome on my awesome homepage.
+    Sit comfortable and search for your favourite recipe :)
+{% endblock %}

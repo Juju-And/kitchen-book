@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %} {{ recipe.name }} {% endblock %}
+{% block content %}
+<h1>Recipe for {{ recipe.name }}</h1>
+
+<ul>
+<!--    <li>Name: {{ recipe.name }}</li>-->
+    <li>Added: {{ recipe.time_created }}</li>
+    <li>Ingredients:
+        <ul>
+            {% for ingredient in recipe.ingredients %}
+            <li>{{ ingredient.name }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>Method: {{ recipe.method }}</li>
+</ul>
+{% endblock %}
