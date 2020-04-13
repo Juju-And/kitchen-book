@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h1>Add new product</h1>
+      <form method='post' class="form-horizontal">
+          {{ form.hidden_tag() }}
+          <legend> Name </legend>
+                {{ form.name }}
+          <legend> Category </legend>
+                {{ form.category }}
+<div>
+<button type="submit" class="btn">SAVE</button>
+</div>
+</form>
+{% endblock %}
