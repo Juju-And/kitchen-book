@@ -4,7 +4,7 @@ from werkzeug.utils import redirect
 
 from app.forms import AddProductFrom
 from app.models import Product, db, Categories
-from app.schemas import ProductSchema
+from app.schemas import ProductSchema, CreateProductSchema
 
 
 def init_routes_products(app):
@@ -22,32 +22,28 @@ def init_routes_products(app):
             else:
                 return render_template("products2.html", products=records)
 
-        # elif request.method == "POST":
-        # if request.is_json:
-        #     data = request.get_json()
-        #     new_record = Product(name=data["name"])
-        #     db.session.add(new_record)
-        #     db.session.commit()
-        #     return flask.Response(status=201)
-
-        # else:
-        # return flask.Response(status=400)
-
-    @app.route("/products/add", methods=["GET", "POST"])
-    # @app.route("/products/add.<data_format>", methods=["GET", "POST"])
-    def add_products():
+    @app.route("/products/add", defaults={"data_format": "html"}, methods=["GET", "POST"])
+    @app.route("/products/add.<data_format>", methods=["GET", "POST"])
+    def add_products(data_format):
         """
         Add a new product
         """
         form = AddProductFrom(request.form)
 
         if request.method == "POST":
-            product = Product()
-            product.name = form.name.data
-            product.category_id = int(form.category.data)
-            db.session.add(product)
-            db.session.commit()
-            return redirect("/products")
+            if data_format == "json":
+                user_data = request.json
+                schema = CreateProductSchema()
+                result = schema.load(user_data)
+                db.session.add(result)
+                db.session.commit()
+            else:
+                product = Product()
+                product.name = form.name.data
+                product.category_id = int(form.category.data)
+                db.session.add(product)
+                db.session.commit()
+                return redirect("/products")
 
         return render_template("addProduct.html", form=form)
 
