@@ -25,7 +25,7 @@ class LoginForm(FlaskForm):
 
 
 # hardcoded categories - TO BE FIXED
-CATEGORIES = [(1, "warzywki"), (2, "owocki"), (3, "proszki")]
+CATEGORIES = [(1, "warzywki"), (4, "owocki"), (5, "proszki")]
 
 
 class AddProductFrom(FlaskForm):

@@ -1,6 +1,5 @@
 import flask
-from flask import request, render_template, Response, url_for, flash
-from marshmallow import pprint
+from flask import request, render_template, Response, flash
 from werkzeug.utils import redirect
 
 from app.forms import AddProductFrom
@@ -15,7 +14,7 @@ def init_routes_products(app):
         records = Product.query.all()
         if request.method == "GET":
             if data_format == "json":
-                schema = ProductSchema(only=("product_id", "name"), many=True)
+                schema = ProductSchema(many=True)
                 result = schema.dumps(records)
                 return Response(
                     response=result, status=200, mimetype="application/json"
@@ -42,15 +41,12 @@ def init_routes_products(app):
         """
         form = AddProductFrom(request.form)
 
-        if request.method == "POST" and form.validate():
-            # save the product
+        if request.method == "POST":
             product = Product()
             product.name = form.name.data
-            # Add the new product to the database
+            product.category_id = int(form.category.data)
             db.session.add(product)
-            # commit the data to the database
             db.session.commit()
-            flash('Product created successfully!')
             return redirect("/products")
 
         return render_template("addProduct.html", form=form)

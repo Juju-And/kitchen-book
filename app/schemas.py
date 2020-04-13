@@ -1,10 +1,16 @@
 from marshmallow import Schema, fields
 
 
+class CategoriesSchema(Schema):
+    id = fields.Int()
+    name = fields.Str()
+    products = fields.List(fields.Nested(lambda: ProductSchema()))
+
+
 class ProductSchema(Schema):
     product_id = fields.Int()
     name = fields.Str()
-    category_id = fields.Int()
+    category = fields.Nested(CategoriesSchema, only=["id", "name"])
 
 
 class RecipeSchema(Schema):
