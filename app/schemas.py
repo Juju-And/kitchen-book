@@ -22,7 +22,14 @@ class CreateProductSchema(Schema):
 
     @post_load
     def make_product(self, data, **kwargs):
-        category_id = db.session.query(Categories).filter_by(name=data['category_name']).first().id
+        category = db.session.query(Categories).filter_by(name=data['category_name']).first()
+        if category is not None:
+            category_id = category.id
+        else:
+            new_category = Categories(name=data['category_name'])
+            db.session.add(new_category)
+            db.session.commit()
+            category_id = new_category.id
         del data['category_name']
         return Product(category_id=category_id, **data)
 

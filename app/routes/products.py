@@ -9,7 +9,7 @@ from app.schemas import ProductSchema, CreateProductSchema
 
 def init_routes_products(app):
     @app.route("/products", defaults={"data_format": "html"}, methods=["GET", "POST"])
-    @app.route("/products.<data_format>", methods=["GET", "POST"])
+    @app.route("/products.<data_format>", methods=["GET"])
     def products(data_format):
         records = Product.query.all()
         if request.method == "GET":
@@ -22,13 +22,21 @@ def init_routes_products(app):
             else:
                 return render_template("products2.html", products=records)
 
-    @app.route("/products/add", defaults={"data_format": "html"}, methods=["GET", "POST"])
+    @app.route(
+        "/products/add", defaults={"data_format": "html"}, methods=["GET", "POST"]
+    )
     @app.route("/products/add.<data_format>", methods=["GET", "POST"])
     def add_products(data_format):
         """
         Add a new product
         """
+
+        available_categories = db.session.query(Categories).all()
+        categories_list = [
+            (category.id, category.name) for category in available_categories
+        ]
         form = AddProductFrom(request.form)
+        form.category.choices = categories_list
 
         if request.method == "POST":
             if data_format == "json":
@@ -47,18 +55,36 @@ def init_routes_products(app):
 
         return render_template("addProduct.html", form=form)
 
-    @app.route("/products/<product_id>", methods=["GET", "DELETE"])
-    def handle_product(product_id):
-        if request.method == "GET":
-            record = Product.query.get(product_id)
-            results = [{"id": record.product_id, "name": record.name,}]
+    @app.route(
+        "/products/<product_id>", defaults={"data_format": "html"}, methods=["GET"]
+    )
+    @app.route("/products/<product_id>.<data_format>", methods=["GET"])
 
-            return {"records": results}
-        elif request.method == "DELETE":
-            record = Product.query.get(product_id)
-            db.session.delete(record)
-            db.session.commit()
-            return flask.Response(status=204)
+    # @app.route("/products/<product_id>", methods=["GET", "DELETE"])
+    def handle_product(product_id, data_format):
+        record = Product.query.filter_by(product_id=product_id).first()
+        if request.method == "GET":
+            if data_format == "json":
+                schema = ProductSchema()
+                result = schema.dumps(record)
+                return Response(
+                    response=result, status=200, mimetype="application/json"
+                )
+            else:
+                return render_template("product_id.html", product=record)
+        # elif request.method == "DELETE":
+
+    # @app.route(
+    #     "/products/<product_id>/delete",
+    #     defaults={"data_format": "html"},
+    #     methods=["DELETE"],
+    # )
+    @app.route("/products/<product_id>", methods=["DELETE"])
+    def delete_product(product_id):
+        Product.query.filter_by(product_id=product_id).delete()
+        db.session.commit()
+        # return redirect("/products")
+        # return flask.Response(status=204)
 
     @app.route("/products/<product_id>/categories", methods=["GET", "POST"])
     def product_category(product_id):

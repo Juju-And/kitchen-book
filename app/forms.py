@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, required
 
-from app.models import Categories
+# from app.models import Categories, db
 
 
 class RegistrationForm(FlaskForm):
@@ -25,9 +25,11 @@ class LoginForm(FlaskForm):
 
 
 # hardcoded categories - TO BE FIXED
-CATEGORIES = [(1, "warzywki"), (4, "owocki"), (5, "proszki")]
+# categories = [(1, "warzywki"), (4, "owocki"), (5, "proszki")]
+
+
 
 
 class AddProductFrom(FlaskForm):
     name = StringField("Name")
-    category = SelectField("Category", choices=CATEGORIES)
+    category = SelectField("Category")

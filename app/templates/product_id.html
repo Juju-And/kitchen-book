@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+    .important { color: #336699; }
+  </style>
+{% endblock %}
+{% block content %}
+  <h1>{{ product.name }}</h1>
+
+<ul>
+    <li>Name: {{ product.name }}</a></li>
+    <li>Id: {{ product.product_id }}</a></li>
+    <li>Category: <a href="/products/{{ product.id }}">{{ product.category.name }}</a></li>
+</ul>
+
+<h2><a href="/products/{{ product.id }}/edit">Edit</a></h2>
+<h2><button id="delete-button" onclick="delete_handler(this)" data-url="/products/{{ product.product_id }}">Delete</button></h2>
+<h2><a href="/products/add">Add new product</a></h2>
+
+{% endblock %}
