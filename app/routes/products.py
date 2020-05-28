@@ -1,5 +1,5 @@
-import flask
-from flask import request, render_template, Response, flash
+from flask import request, render_template, Response
+from flask_login import login_required
 from werkzeug.utils import redirect
 
 from app.forms import AddProductFrom
@@ -10,6 +10,7 @@ from app.schemas import ProductSchema, CreateProductSchema
 def init_routes_products(app):
     @app.route("/products", defaults={"data_format": "html"}, methods=["GET", "POST"])
     @app.route("/products.<data_format>", methods=["GET"])
+    @login_required
     def products(data_format):
         records = Product.query.all()
         if request.method == "GET":
@@ -26,6 +27,7 @@ def init_routes_products(app):
         "/products/add", defaults={"data_format": "html"}, methods=["GET", "POST"]
     )
     @app.route("/products/add.<data_format>", methods=["GET", "POST"])
+    @login_required
     def add_products(data_format):
         """
         Add a new product
@@ -59,8 +61,7 @@ def init_routes_products(app):
         "/products/<product_id>", defaults={"data_format": "html"}, methods=["GET"]
     )
     @app.route("/products/<product_id>.<data_format>", methods=["GET"])
-
-    # @app.route("/products/<product_id>", methods=["GET", "DELETE"])
+    @login_required
     def handle_product(product_id, data_format):
         record = Product.query.filter_by(product_id=product_id).first()
         if request.method == "GET":
@@ -72,41 +73,9 @@ def init_routes_products(app):
                 )
             else:
                 return render_template("product_id.html", product=record)
-        # elif request.method == "DELETE":
 
-    # @app.route(
-    #     "/products/<product_id>/delete",
-    #     defaults={"data_format": "html"},
-    #     methods=["DELETE"],
-    # )
     @app.route("/products/<product_id>", methods=["DELETE"])
+    @login_required
     def delete_product(product_id):
         Product.query.filter_by(product_id=product_id).delete()
         db.session.commit()
-        # return redirect("/products")
-        # return flask.Response(status=204)
-
-    @app.route("/products/<product_id>/categories", methods=["GET", "POST"])
-    def product_category(product_id):
-        if request.method == "GET":
-            product = Product.query.get(product_id)
-            results = [
-                {
-                    "id": product.product_id,
-                    "name": product.name,
-                    "category": product.category.name,
-                }
-            ]
-
-            return {"records": results}
-
-        elif request.method == "POST":
-            product = Product.query.get(product_id)
-            if request.is_json:
-                data = request.get_json()
-                category = Categories.query.get(data["id"])
-                category.products.append(product)
-                db.session.commit()
-                return flask.Response(status=201)
-            else:
-                return flask.Response(status=400)

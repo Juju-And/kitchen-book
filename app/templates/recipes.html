@@ -9,9 +9,15 @@
 {% block content %}
   <h1>List of recipes</h1>
 
+{% if recipes|length < 1 %}
+
+    <h3>You don't have any recipes so far, try to add some.</h3>
+
+{% else %}
 <ul>
     {% for recipe in recipes %}
-    <li><a href="/recipes/{{ recipe.id }}">{{ recipe.name }}</a></li>
+    <li><a href="/recipes/{{ recipe.recipe_id }}">{{ recipe.name }}</a></li>
     {% endfor %}
 </ul>
+{% endif %}
 {% endblock %}

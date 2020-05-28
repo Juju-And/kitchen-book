@@ -8,6 +8,9 @@
 {% endblock %}
 {% block content %}
   <h1>Index</h1>
+{% if current_user.is_authenticated %}
+  Hi {{ current_user.email }}!
+{% endif %}
   <p class="important">
     Welcome on my awesome homepage.
     Sit comfortable and search for your favourite recipe :)

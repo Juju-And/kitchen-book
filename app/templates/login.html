@@ -30,6 +30,7 @@
                 {{ form.password }}
                 {% endif %}
                 <br>
+                {{ form.remember_me() }} {{ form.remember_me.label }}
             </div>
         </fieldset>
         {{ form.submit }}

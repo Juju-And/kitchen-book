@@ -1,15 +1,17 @@
 import flask
 from flask import request, Response, render_template
+from flask_login import login_required
 
 from app.models import db, Recipe, Product
 from app.schemas import RecipeSchema
 
 
 def init_routes_recipes(app):
-    # @app.route("/recipes", defaults={"data_format": "html"}, methods=["GET", "POST"])
-    @app.route("/recipes", methods=["GET", "POST"])
-    # @app.route("/recipes.<data_format>", methods=["GET", "DELETE"])
-    def recipes():
+    @app.route("/recipes", defaults={"data_format": "html"}, methods=["GET", "POST"])
+    @app.route("/recipes.<data_format>", methods=["GET", "DELETE"])
+    @login_required
+    def recipes(data_format):
+
         if request.method == "POST":
             if request.is_json:
                 data = request.get_json()
@@ -19,15 +21,16 @@ def init_routes_recipes(app):
                 return flask.Response(status=201)
             else:
                 return flask.Response(status=400)
-
         elif request.method == "GET":
             records = Recipe.query.all()
-            schema = RecipeSchema(only=("recipe_id", "name"), many=True)
-            result = schema.dumps(records)
-            return Response(response=result, status=200, mimetype="application/json")
-        # else:
-        #     results = [{"id": record.recipe_id, "name": record.name, } for record in records]
-        #     return render_template("recipes.html", recipes=results)
+            if data_format == "json":
+                schema = RecipeSchema(only=("recipe_id", "name"), many=True)
+                result = schema.dumps(records)
+                return Response(
+                    response=result, status=200, mimetype="application/json"
+                )
+            else:
+                return render_template("recipes.html", recipes=records)
 
     @app.route(
         "/recipes/<recipe_id>",
@@ -35,11 +38,12 @@ def init_routes_recipes(app):
         methods=["GET", "DELETE"],
     )
     @app.route("/recipes/<recipe_id>.<data_format>", methods=["GET", "DELETE"])
+    @login_required
     def handle_recipe(recipe_id, data_format):
         if request.method == "GET":
             record = Recipe.query.get(recipe_id)
             if data_format == "json":
-                schema = RecipeSchema()
+                schema = RecipeSchema(many=True)
                 result = schema.dumps(record)
                 return Response(
                     response=result, status=200, mimetype="application/json"
@@ -54,6 +58,7 @@ def init_routes_recipes(app):
             return flask.Response(status=204)
 
     @app.route("/recipes/<recipe_id>/ingredients", methods=["GET", "POST"])
+    @login_required
     def ingredients(recipe_id):
         if request.method == "POST":
             if request.is_json:
