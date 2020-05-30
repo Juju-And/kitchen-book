@@ -21,7 +21,7 @@ def init_routes_products(app):
                     response=result, status=200, mimetype="application/json"
                 )
             else:
-                return render_template("products2.html", products=records)
+                return render_template("products2.html", products=records, selected_menu="products")
 
     @app.route(
         "/products/add", defaults={"data_format": "html"}, methods=["GET", "POST"]
@@ -55,7 +55,7 @@ def init_routes_products(app):
                 db.session.commit()
                 return redirect("/products")
 
-        return render_template("addProduct.html", form=form)
+        return render_template("addProduct.html", form=form, selected_menu="products")
 
     @app.route(
         "/products/<product_id>", defaults={"data_format": "html"}, methods=["GET"]
@@ -72,7 +72,7 @@ def init_routes_products(app):
                     response=result, status=200, mimetype="application/json"
                 )
             else:
-                return render_template("product_id.html", product=record)
+                return render_template("product_id.html", product=record, selected_menu="products")
 
     @app.route("/products/<product_id>", methods=["DELETE"])
     @login_required

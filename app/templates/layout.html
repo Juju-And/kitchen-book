@@ -1,24 +1,65 @@
 <!doctype html>
 <html>
 <head>
-    {% block head %}
+<!--    {% block head %}-->
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/css/mdb.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/static/css/style.css">
-    <!--    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
+<!--        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">-->
     <title>{% block title %}Kitchen book{% endblock %}</title>
-    {% endblock %}
+<!--    {% endblock %}-->
 </head>
 <body>
 
-<ul id="menu_list">
-    <li><a href="/">Home</a></li>
-    <li><a href="/recipes">Recipes</a></li>
-    <li><a href="/products">Products</a></li>
-    <li><a href="/login">Login</a></li>
-    <li><a href="/register">Register</a></li>
-    <li><a href="/logout">Logout</a></li>
-
-</ul>
-<br><br><br>
+<nav class="navbar navbar-expand-lg navbar-dark indigo">
+<div class="container">
+  <a id="kb-logotype" class="navbar-brand" href="/">Kitchen book</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item {% if selected_menu=='home' %} active {% endif%}">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item {% if selected_menu=='recipes' %} active {% endif%}">
+        <a class="nav-link" href="/recipes">Recipes</a>
+      </li>
+      <li class="nav-item {% if selected_menu=='products' %} active {% endif%}">
+        <a class="nav-link" href="/products">Products</a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item {% if selected_menu=='login' %} active {% endif%}">
+        <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i>Login</a>
+      </li>
+      <li class="nav-item {% if selected_menu=='register' %} active {% endif%}">
+        <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i>Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
+      </li>
+    </ul>
+<!--    <span class="navbar-text white-text">-->
+<!--        <blockquote class="blockquote text-right display-4">-->
+<!--            Always start out with a larger pot than what you think you need.-->
+<!--            <footer class="blockquote-footer"><cite title="Source Title">— Julia Child</cite></footer>-->
+<!--        </blockquote>-->
+<!--    </span>-->
+  </div>
+</div>
+</nav>
+<div class="container">
+<br>
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
@@ -35,8 +76,18 @@
     &copy; Copyright 2020 by <a href="http://domain.invalid/">Juju</a>.
     {% endblock %}
 </div>
-<script src="/static/js/jquery-3.3.1.min.js"></script>
+</div>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
 
+
+<!--<script src="/static/js/jquery-3.3.1.min.js"></script>-->
 <script src="/static/js/delete_handler.js"></script>
 </body>
 </html>

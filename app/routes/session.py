@@ -23,7 +23,7 @@ def init_routes_session(app):
 
                 if exists is None:
                     flash("That username is already taken, please choose another")
-                    return render_template("register.html", form=form)
+                    return render_template("register.html", form=form, selected_menu="register")
 
                 else:
                     user = User(email=email)
@@ -36,7 +36,7 @@ def init_routes_session(app):
                     )
                     return redirect(url_for("mainpage"))
 
-            return render_template("register.html", form=form)
+            return render_template("register.html", form=form, selected_menu="register")
 
         except Exception as e:
             return str(e)

@@ -30,7 +30,7 @@ def init_routes_recipes(app):
                     response=result, status=200, mimetype="application/json"
                 )
             else:
-                return render_template("recipes.html", recipes=records)
+                return render_template("recipes.html", recipes=records, selected_menu='recipes')
 
     @app.route(
         "/recipes/<recipe_id>",

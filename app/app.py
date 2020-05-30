@@ -27,7 +27,7 @@ def load_user(user_id):
 @app.route("/", methods=["GET"])
 def mainpage():
     if request.method == "GET":
-        return render_template("main.html")
+        return render_template("main.html", selected_menu="home")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -42,7 +42,7 @@ def login():
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("mainpage"))
-    return render_template("login.html", title="Sign In", form=form)
+    return render_template("login.html", title="Sign In", form=form, selected_menu="login")
 
 
 @app.route("/logout")
