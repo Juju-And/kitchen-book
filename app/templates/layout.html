@@ -37,6 +37,9 @@
       <li class="nav-item {% if selected_menu=='products' %} active {% endif%}">
         <a class="nav-link" href="/products">Products</a>
       </li>
+      <li class="nav-item {% if selected_menu=='shopping_list' %} active {% endif%}">
+        <a class="nav-link" href="/products">Shopping list</a>
+      </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li class="nav-item {% if selected_menu=='login' %} active {% endif%}">
@@ -60,6 +63,7 @@
 </nav>
 <div class="container">
 <br>
+
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}

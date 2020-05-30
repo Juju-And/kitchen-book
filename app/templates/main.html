@@ -7,11 +7,31 @@
   </style>
 {% endblock %}
 {% block content %}
-  <h1>Index</h1>
 {% if current_user.is_authenticated %}
   Hi {{ current_user.email }}!
 {% endif %}
   <p class="important">
     Welcome on my awesome homepage.
     Sit comfortable and search for your favourite recipe :)
+
+    <div class="row">
+    <div class="col"><h3>Top 10 recipes on Kitchen Book</h3>
+    <ul>
+        <li><a>Juicy meatballs</a></li>
+        <li><a>Baked shoulder</a></li>
+        <li><a>Brisket slammin'</a></li>
+        <li><a>Juicy smoker soy sauce burgers</a></li>
+        <li><a>Recipe 5</a></li>
+        <li><a>Recipe 6</a></li>
+        <li><a>Slice butternut</a></li>
+        <li><a>Recipe 8</a></li>
+        <li><a>Infused skillet</a></li>
+        <li><a>Meals ramen rarities</a></li>
+    </ul>
+
+    </div>
+  <div class="col">
+{% include 'mainPageCarousel.html' %}
+  </div>
+</div>
 {% endblock %}
