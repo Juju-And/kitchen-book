@@ -12,16 +12,22 @@ def init_routes_products(app):
     @app.route("/products.<data_format>", methods=["GET"])
     @login_required
     def products(data_format):
-        records = Product.query.all()
+        products = Product.query.all()
+        categories = Product.query.all()
         if request.method == "GET":
             if data_format == "json":
                 schema = ProductSchema(many=True)
-                result = schema.dumps(records)
+                result = schema.dumps(products)
                 return Response(
                     response=result, status=200, mimetype="application/json"
                 )
             else:
-                return render_template("products2.html", products=records, selected_menu="products")
+                return render_template(
+                    "products2.html",
+                    products=products,
+                    categories=categories,
+                    selected_menu="products",
+                )
 
     @app.route(
         "/products/add", defaults={"data_format": "html"}, methods=["GET", "POST"]
@@ -72,7 +78,9 @@ def init_routes_products(app):
                     response=result, status=200, mimetype="application/json"
                 )
             else:
-                return render_template("product_id.html", product=record, selected_menu="products")
+                return render_template(
+                    "product_id.html", product=record, selected_menu="products"
+                )
 
     @app.route("/products/<product_id>", methods=["DELETE"])
     @login_required
