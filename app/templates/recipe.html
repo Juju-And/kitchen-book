@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block title %} {{ recipe.name }} {% endblock %}
 {% block content %}
-<h1>Recipe for {{ recipe.name }}</h1>
+<h3 class="text-muted">Recipe for {{ recipe.name }}</h3>
 
 <ul>
 <!--    <li>Name: {{ recipe.name }}</li>-->
@@ -9,12 +9,13 @@
     <li>Ingredients:
         <ul>
             {% for ingredient in recipe.ingredients %}
-            <li>{{ ingredient.name }}</li>
+            <li>{{ ingredient }}</li>
             {% endfor %}
         </ul>
     </li>
     <li>Method: {{ recipe.method }}</li>
 </ul>
+<img src='/static/images/uploads/{{ recipe.picture }}'>
 <div align="right">
 <h3 class="text-muted">Rate this recipe:</h3>
 <span class="fa-stack text-muted">
@@ -36,8 +37,8 @@
 </div>
 <br><br>
 <div align="center">
-<button type="button" class="btn btn-outline-info btn-rounded waves-effect">Back to recipes</button>
-    <button type="button" class="btn btn-outline-info btn-rounded waves-effect">Previous recipe</button>
-    <button type="button" class="btn btn-outline-info btn-rounded waves-effect">Next recipe</button>
+    <a href="/recipes"><button type="button" class="btn btn-outline-info btn-rounded waves-effect">Back to recipes</button></a>
+    <button type="button" class="btn btn-outline-info btn-rounded waves-effect" disabled>Previous recipe</button>
+    <button type="button" class="btn btn-outline-info btn-rounded waves-effect" disabled>Next recipe</button>
 </div>
 {% endblock %}

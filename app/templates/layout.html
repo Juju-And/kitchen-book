@@ -42,15 +42,18 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
+        {% if not current_user.is_authenticated %}
       <li class="nav-item {% if selected_menu=='login' %} active {% endif%}">
         <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i>Login</a>
       </li>
       <li class="nav-item {% if selected_menu=='register' %} active {% endif%}">
         <a class="nav-link" href="/register"><i class="fas fa-user-plus"></i>Register</a>
       </li>
+        {% else %}
       <li class="nav-item">
         <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a>
       </li>
+      {% endif %}
     </ul>
 <!--    <span class="navbar-text white-text">-->
 <!--        <blockquote class="blockquote text-right display-4">-->

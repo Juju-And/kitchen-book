@@ -1,6 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, required
+from wtforms import (
+    StringField,
+    PasswordField,
+    SubmitField,
+    BooleanField,
+    SelectField,
+    TextAreaField,
+    FileField,
+)
+from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 
 class RegistrationForm(FlaskForm):
@@ -23,10 +31,17 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField("Remember Me")
 
 
-# hardcoded categories - TO BE FIXED
-# categories = [(1, "warzywki"), (4, "owocki"), (5, "proszki")]
-
-
 class AddProductFrom(FlaskForm):
     name = StringField("Name")
     category = SelectField("Category")
+
+
+class AddRecipeFrom(FlaskForm):
+    name = StringField("Name")
+    method = TextAreaField("How to make it")
+    preparation_time = StringField("Time")
+    picture = FileField("Image File")
+                        # [validators.regexp("^[^/\\]\.jpg$")])
+    ingredient = SelectField("Product")
+    # ingredient2 = SelectField("Product")
+    # ingredient3 = SelectField("Product")

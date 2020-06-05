@@ -7,11 +7,11 @@
   </style>
 {% endblock %}
 {% block content %}
-  <h1>List of recipes</h1>
+  <h3 class="text-muted">List of recipes</h3>
 
 {% if recipes|length < 1 %}
 
-    <h3>You don't have any recipes so far, try to add some.</h3>
+    <h3 class="text-muted">You don't have any recipes so far, try to add some.</h3>
 
 {% else %}
 <ul>
@@ -20,4 +20,8 @@
     {% endfor %}
 </ul>
 {% endif %}
+
+<a href="/recipes/add">
+    <button type="button" class="btn btn-outline-info btn-rounded waves-effect">Add new recipe</button>
+</a>
 {% endblock %}

@@ -26,7 +26,8 @@ def init_routes_session(app):
                     return render_template("register.html", form=form, selected_menu="register")
 
                 else:
-                    user = User(email=email)
+                    username = form.username.data
+                    user = User(username=username, email=email)
                     user.set_password(form.password.data)
                     db.session.add(user)
                     db.session.commit()

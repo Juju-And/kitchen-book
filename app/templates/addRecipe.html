@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}Add recipe{% endblock %}
+{% block content %}
+  <h3 class="text-muted">Add new recipe</h3>
+      <form method="POST" enctype="multipart/form-data" class="form-horizontal">
+          {{ form.hidden_tag() }}
+          <legend class="text-muted"> Name </legend>
+                {{ form.name }}
+          <legend class="text-muted"> Method </legend>
+                {{ form.method }}
+          <legend class="text-muted"> Time </legend>
+                {{ form.preparation_time }}
+          <legend class="text-muted"> Ingredients </legend>
+                {{ form.ingredient1 }}
+                {{ form.ingredient2 }}
+                {{ form.ingredient3 }}
+          <legend class="text-muted"> Picture </legend>
+
+            <div class="custom-file">
+                <input type="file" name="picture" class="custom-file-input addFile" id="pictureFile">
+                <label class="custom-file-label" for="pictureFile">Select file</label>
+            </div>
+<div>
+    <br><br>
+<button type="submit" class="btn btn-outline-info btn-rounded waves-effect">SAVE</button>
+</div>
+</form>
+<br><br><br>
+<button type="button" class="btn btn-outline-info btn-rounded waves-effect">
+    <a href="/recipes">Back to recipes</a>
+</button>
+{% endblock %}

@@ -87,3 +87,4 @@ def init_routes_products(app):
     def delete_product(product_id):
         Product.query.filter_by(product_id=product_id).delete()
         db.session.commit()
+

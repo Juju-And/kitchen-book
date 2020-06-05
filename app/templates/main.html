@@ -7,8 +7,9 @@
   </style>
 {% endblock %}
 {% block content %}
+<br>
 {% if current_user.is_authenticated %}
-  Hi {{ current_user.email }}!
+  Hi {{ current_user.username }}!
 {% endif %}
   <p class="important">
     Welcome on my awesome homepage.

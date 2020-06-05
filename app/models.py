@@ -1,8 +1,10 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, TIMESTAMP
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy_imageattach.entity import Image, image_attachment
 
 Base = declarative_base()
 
@@ -44,11 +46,23 @@ class Recipe(db.Model):
         TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp()
     )
     preparation_time = db.Column(db.String())
-    # picture = image_attachment('UserPicture') // ToDo
-    ingredients = db.relationship(
+    # picture = image_attachment("FoodPicture")
+    picture = db.Column(db.String())
+    ingredients_relationship = db.relationship(
         "Product", secondary=ingred, backref=db.backref("ingredients", lazy="dynamic")
     )
+    ingredients = association_proxy(
+        "ingredients_relationship", "name", creator=lambda name: Product(name=name),
+    )
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+
+
+# class FoodPicture(Base, Image):
+#     """Food picture model."""
+#
+#     recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.recipe_id"), primary_key=True)
+#     recipe = db.relationship("Recipe")
+#     __tablename__ = "food_picture"
 
 
 class Product(db.Model):

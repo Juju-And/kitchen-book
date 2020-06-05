@@ -1,9 +1,13 @@
 import flask
 from flask import request, Response, render_template
 from flask_login import login_required
+from werkzeug.utils import redirect
 
+from app.forms import AddRecipeFrom
 from app.models import db, Recipe, Product
 from app.schemas import RecipeSchema
+
+import os
 
 
 def init_routes_recipes(app):
@@ -30,7 +34,9 @@ def init_routes_recipes(app):
                     response=result, status=200, mimetype="application/json"
                 )
             else:
-                return render_template("recipes.html", recipes=records, selected_menu='recipes')
+                return render_template(
+                    "recipes.html", recipes=records, selected_menu="recipes"
+                )
 
     @app.route(
         "/recipes/<recipe_id>",
@@ -49,6 +55,7 @@ def init_routes_recipes(app):
                     response=result, status=200, mimetype="application/json"
                 )
             else:
+                print(record.ingredients)
                 return render_template("recipe.html", recipe=record)
 
         elif request.method == "DELETE":
@@ -80,3 +87,43 @@ def init_routes_recipes(app):
 
             results = [{"ingredients": ingredients_list}]
             return {recipe.name: results}
+
+    @app.route(
+        "/recipes/add", defaults={"data_format": "html"}, methods=["GET", "POST"]
+    )
+    @app.route("/recipes/add.<data_format>", methods=["GET", "POST"])
+    @login_required
+    def add_recipes(data_format):
+        """
+        Add a new recipe
+        """
+
+        available_products = db.session.query(Product).all()
+        # categories_list = [
+        #     (product.id, product.name) for product in available_products
+        # ]
+        form = AddRecipeFrom(request.form)
+
+        if request.method == "POST":
+            # if data_format == "json":
+            #     user_data = request.json
+            #     schema = CreateRecipeSchema()
+            #     result = schema.load(user_data)
+            #     db.session.add(result)
+            #     db.session.commit()
+            # else:
+            recipe = Recipe(
+                name=form.name.data,
+                method=form.method.data,
+                preparation_time=form.preparation_time.data,
+            )
+            if request.files:
+                image = request.files["picture"]
+                image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
+                recipe.picture = image.filename
+
+            db.session.add(recipe)
+            db.session.commit()
+            return redirect("/recipes")
+
+        return render_template("addRecipe.html", form=form, selected_menu="recipes")

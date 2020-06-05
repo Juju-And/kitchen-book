@@ -1,9 +1,9 @@
 from flask_login import current_user, login_user, logout_user, LoginManager
 from werkzeug.utils import redirect
 
-import app.routes.session
 from flask import request, render_template, Response, Flask, url_for, flash
 
+import app.routes.session
 from app.database import init_db
 from app.forms import LoginForm
 from app.models import User
@@ -17,11 +17,18 @@ FLASK_APP = "app"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+app.config["IMAGE_UPLOADS"] = "app/static/images/uploads"
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash("Please log in to use the website.")
+    return redirect(url_for("login"))
 
 
 @app.route("/", methods=["GET"])
@@ -42,7 +49,9 @@ def login():
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("mainpage"))
-    return render_template("login.html", title="Sign In", form=form, selected_menu="login")
+    return render_template(
+        "login.html", title="Sign In", form=form, selected_menu="login"
+    )
 
 
 @app.route("/logout")
