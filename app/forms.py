@@ -42,6 +42,6 @@ class AddRecipeFrom(FlaskForm):
     preparation_time = StringField("Time")
     picture = FileField("Image File")
                         # [validators.regexp("^[^/\\]\.jpg$")])
-    ingredient = SelectField("Product")
+    ingredients = TextAreaField("Igredients")
     # ingredient2 = SelectField("Product")
     # ingredient3 = SelectField("Product")

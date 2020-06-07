@@ -10,11 +10,13 @@ Base = declarative_base()
 
 db = SQLAlchemy()
 
-ingred = db.Table(
-    "ingred",
-    db.Column("recipe_id", db.Integer, db.ForeignKey("recipe.recipe_id")),
-    db.Column("product_id", db.Integer, db.ForeignKey("product.product_id")),
-)
+
+class Ingredient(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe.recipe_id"))
+    product_id = db.Column(db.Integer, db.ForeignKey("product.product_id"))
+    recipe = db.relationship("Recipe", foreign_keys="Ingredient.recipe_id")
+    product = db.relationship("Product", foreign_keys="Ingredient.product_id")
 
 
 class User(db.Model, UserMixin):
@@ -49,7 +51,9 @@ class Recipe(db.Model):
     # picture = image_attachment("FoodPicture")
     picture = db.Column(db.String())
     ingredients_relationship = db.relationship(
-        "Product", secondary=ingred, backref=db.backref("ingredients", lazy="dynamic")
+        "Product",
+        secondary="ingredient",
+        backref=db.backref("ingredients", lazy="dynamic"),
     )
     ingredients = association_proxy(
         "ingredients_relationship", "name", creator=lambda name: Product(name=name),

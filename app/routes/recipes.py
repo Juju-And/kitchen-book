@@ -1,13 +1,12 @@
+import os
 import flask
 from flask import request, Response, render_template
 from flask_login import login_required
 from werkzeug.utils import redirect
 
 from app.forms import AddRecipeFrom
-from app.models import db, Recipe, Product
+from app.models import db, Recipe, Product, Ingredient
 from app.schemas import RecipeSchema
-
-import os
 
 
 def init_routes_recipes(app):
@@ -99,10 +98,11 @@ def init_routes_recipes(app):
         """
 
         available_products = db.session.query(Product).all()
-        # categories_list = [
-        #     (product.id, product.name) for product in available_products
+        # product_list = [
+        #     (product.product_id, product.name) for product in available_products
         # ]
         form = AddRecipeFrom(request.form)
+        # form.ingredient.choices = product_list
 
         if request.method == "POST":
             # if data_format == "json":
@@ -112,11 +112,13 @@ def init_routes_recipes(app):
             #     db.session.add(result)
             #     db.session.commit()
             # else:
+
             recipe = Recipe(
                 name=form.name.data,
                 method=form.method.data,
                 preparation_time=form.preparation_time.data,
             )
+
             if request.files:
                 image = request.files["picture"]
                 image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
@@ -124,6 +126,26 @@ def init_routes_recipes(app):
 
             db.session.add(recipe)
             db.session.commit()
+
+            ingredients_to_add = get_ingredients(form.ingredients.data)
+            for name in ingredients_to_add:
+                product = db.session.query(Product).filter_by(name=name).first()
+                if not product:
+                    product = Product()
+                    product.name = name
+                    db.session.add(product)
+                    db.session.commit()
+
+                ingredient = Ingredient()
+                ingredient.product_id = product.product_id
+                ingredient.recipe_id = recipe.recipe_id
+                db.session.add(ingredient)
+                db.session.commit()
+
             return redirect("/recipes")
 
         return render_template("addRecipe.html", form=form, selected_menu="recipes")
+
+
+def get_ingredients(ingredients):
+    return ingredients.split(", ")
