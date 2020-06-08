@@ -97,12 +97,7 @@ def init_routes_recipes(app):
         Add a new recipe
         """
 
-        available_products = db.session.query(Product).all()
-        # product_list = [
-        #     (product.product_id, product.name) for product in available_products
-        # ]
         form = AddRecipeFrom(request.form)
-        # form.ingredient.choices = product_list
 
         if request.method == "POST":
             # if data_format == "json":
